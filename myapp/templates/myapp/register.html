@@ -1,0 +1,56 @@
+{% extends 'myapp/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | Anime Manga Bookstore</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+  <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Create a New Account</h2>
+
+    {% if messages %}
+      <div class="mb-4">
+        {% for message in messages %}
+          <div class="text-red-600">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form action="{% url 'register' %}" method="POST" class="space-y-6">
+      {% csrf_token %}
+      
+      <!-- Display form errors -->
+      {% if form.errors %}
+        <div class="text-red-600 mb-4">
+          <ul>
+            {% for field, errors in form.errors.items %}
+              {% for error in errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {{ form.as_p }} 
+
+      <button type="submit"
+              class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg transition duration-200">
+          Register
+      </button>
+    </form>
+
+    <div class="text-center mt-6 text-sm text-gray-600">
+      <p>Already have an account? <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Log in</a></p>
+    </div>
+  </div>
+
+</body>
+</html>
+{% endblock %}

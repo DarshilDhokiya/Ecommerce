@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Header Section -->
+    <header class="bg-blue-600 text-white p-6 text-center shadow-md">
+        <h1 class="text-3xl font-bold">Billing Page</h1>
+        <p class="mt-2 text-xl">Please review your order and shipping details</p>
+    </header>
+
+    <!-- Main Content Section -->
+    <div class="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-lg mt-10">
+        <!-- Product Summary -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-blue-600">Order Summary</h2>
+            <div class="flex justify-between border-b py-2 mb-4">
+                <span class="font-medium w-1/3 text-gray-700">Product Name</span>
+                <span class="font-medium w-1/3 text-center text-gray-700">Quantity</span>
+                <span class="font-medium w-1/3 text-right text-gray-700">Price</span>
+            </div>
+            <!-- Loop through cart items -->
+            {% for product in cart_products %}
+            <div class="flex justify-between py-2 border-b">
+                <span class="w-1/3 text-gray-800">{{ product.name }}</span>
+                <span class="w-1/3 text-center text-gray-800">
+                    {% for key, value in quantities.items %}
+                        {% if key == product.id|slugify %}
+                            {{ value }}
+                        {% endif %}
+                    {% endfor %}
+                </span>
+                <span class="w-1/3 text-right text-gray-800">${{ product.price }}</span>
+            </div>
+            {% endfor %}
+            <div class="flex justify-between border-t pt-4 mt-4 font-bold">
+                <span class="text-xl text-gray-800">Total</span>
+                <span class="text-xl text-gray-800">${{ totals }}</span>
+            </div>
+        </div>
+
+        <!-- Shipping Information -->
+        <div class="mt-8">
+            <h3 class="text-2xl font-semibold mb-4 text-blue-600">Shipping Information</h3>
+            <div class="bg-gray-50 p-4 rounded-lg border shadow-sm space-y-2">
+                <p class="text-lg"><strong class="text-blue-600">Name:</strong> {{ shipping_info.full_name }}</p>
+                <p class="text-lg"><strong class="text-blue-600">Email:</strong> {{ shipping_info.email }}</p>
+                <p class="text-lg"><strong class="text-blue-600">Phone:</strong> {{ shipping_info.phone }}</p>
+                <p class="text-lg"><strong class="text-blue-600">Address 1:</strong> {{ shipping_info.address_1 }}</p>
+                <p class="text-lg"><strong class="text-blue-600">Address 2:</strong> {{ shipping_info.address_2 }}</p>
+                <p class="text-lg"><strong class="text-blue-600">City:</strong> {{ shipping_info.city }}</p>
+                <p class="text-lg"><strong class="text-blue-600">State:</strong> {{ shipping_info.state }}</p>
+                <p class="text-lg"><strong class="text-blue-600">Zip Code:</strong> {{ shipping_info.zip_code }}</p>
+                <p class="text-lg"><strong class="text-blue-600">Country:</strong> {{ shipping_info.country }}</p>
+            </div>
+        </div>
+
+        <!-- Message Section -->
+        <div class="mt-8 text-center">
+            <p class="text-lg font-semibold text-gray-700">
+                Thank you for your purchase! Your order will be processed and shipped soon.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

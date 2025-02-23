@@ -1,0 +1,70 @@
+{% extends 'myapp/base.html' %}
+{% block content %}
+<h2>Search Results for "{{ query }}"</h2>
+
+<div class="container px-4 px-lg-5 mt-5">
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        {% if results %}
+            {% for product in results %}
+            <div class="col mb-5">
+                <div class="card h-100">
+                    <!-- Product image -->
+                    <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" />
+                    <!-- Product details -->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Product name -->
+                            <h5 class="fw-bolder">{{ product.category }}: {{ product.name }} manga</h5>
+                            <!-- Product price -->
+                            <p class="text-muted">${{ product.price }}</p>
+                        </div>
+                    </div>
+                    <!-- Product actions -->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            <!-- Add to Cart Button -->
+                            <button class="btn btn-outline-dark add-to-cart-btn" data-product-id="{{ product.id }}">
+                                <i class="bi-cart-fill me-1"></i> Add to Cart
+                            </button>
+                            <!-- View Product Button -->
+                            <a class="btn btn-outline-dark mt-auto" href="{% url 'product_detail' product.id %}">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No products found.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Ajax Script for Add to Cart -->
+<script>
+    $(document).on('click', '.add-to-cart-btn', function(e) {
+        e.preventDefault();
+        const productId = $(this).data('product-id');
+        const productQty = 1; // Default quantity for the search results page
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "cart_add" %}',
+            data: {
+                product_id: productId,
+                product_qty: productQty,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function(response) {
+                console.log("Product added to cart successfully");
+                // Optionally update cart quantity in the navbar
+                $('#cart_quantity').text(response.cart_quantity);
+                window.location.href="{% url 'index' %}"
+            },
+            error: function(xhr, errmsg, err) {
+                console.error("Error:", errmsg);
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,65 @@
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="{% url 'index' %}">BOOKMART</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link {% if request.path == '/' %}active{% endif %}" aria-current="page" href="{% url 'index' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+
+                <!-- Authentication Links -->
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+            </ul>
+
+            <!-- Search Form -->
+            <form class="d-flex me-3" role="search" method="GET" action="{% url 'search' %}">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search products..." aria-label="Search" required>
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+
+            <!-- Cart Button -->
+            <a href="{% url 'cart_summary' %}" class="btn btn-outline-dark d-flex align-items-center">
+                <i class="bi-cart-fill me-1"></i>
+                Cart
+                <span id="cart_quantity" class="badge bg-dark text-white ms-1 rounded-pill"></span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Ajax Script for Add to Cart -->
+<script>
+    $(document).on('click', '#AddToCart', function(e) {
+        e.preventDefault();
+        const productId = $(this).val();
+        const productQty = $('#qty-cart option:selected').text();
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "cart_add" %}',
+            data: {
+                product_id: productId,
+                product_qty: productQty,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function(response) {
+                console.log("Product added to cart successfully");
+                // Optionally update cart quantity here
+                $('#cart_quantity').text(response.cart_quantity);
+                window.location.href = "{% url 'index' %}";
+            },
+            error: function(xhr, errmsg, err) {
+                console.error("Error:", errmsg);
+            }
+        });
+    });
+</script>

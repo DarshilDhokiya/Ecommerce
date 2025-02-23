@@ -1,0 +1,38 @@
+#loader {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: 5px solid #bb9696;
+    animation: identifier 1s infinite;
+    border-top-color: black;
+}
+table,td {
+    border-collapse: collapse;
+    border: 1px solid black;
+    height: 50px;
+    width: 100px;
+}
+ tr:nth-child(even)
+ {
+    background-color: blueviolet;
+ }
+ tr:nth-child(odd)
+ {
+    background-color: green;
+ }
+#table {
+    position: absolute;
+    width: 200px;
+    top: 10px;
+    
+}
+
+@keyframes identifier {
+    0% { top: 0; left: 0;}
+    25% { top: 0; left: 350px; }
+    50% { top: 350px; left: 350px; }
+    75% { top: 350px; left: 0; }
+    100% { top: 0; left: 0; }
+}
+ 

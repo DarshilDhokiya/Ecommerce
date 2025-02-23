@@ -1,0 +1,20 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Shipping Information</h2>
+    <!-- Correct form setup -->
+    <form method="POST" action="{% url 'billing' %}" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <!-- Render the shipping form fields -->
+        <div>
+            {{ shipping_form.as_p }}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary w-100">Save Shipping Info & Proceed to Billing</button>
+    </form>
+</div>
+{% endblock %}
